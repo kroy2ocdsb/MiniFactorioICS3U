@@ -27,8 +27,6 @@ public class MediaLoader { // Important: ALL IMAGES NEED UNIQUE NAMES
         fileNameMatcher.find();
         String fileName = fileNameMatcher.group(1);
         
-        System.out.println("Filename:" + fileName);
-        
         FileInputStream inputstream;
         Image image = null;
         try {
@@ -39,10 +37,33 @@ public class MediaLoader { // Important: ALL IMAGES NEED UNIQUE NAMES
             System.out.println("Image not loaded!");
         }
         
+        if (image != null) {
+            imageIndexes.add(fileName);
+            
+            images.add(image);
+        }
+        
         return image;
     }
     
+    public static Image[] importImages(String filePath, String[] fileNames) {
+        Image[] images = new Image[fileNames.length];
+        
+        for (int i = 0; i < fileNames.length; i++) {
+            images[i] = importImage(filePath + "\\" + fileNames[i]);
+        }
+        
+        return images;
+    }
+    
     public static ImageView viewImage(String fileName) {
-        return null;
+        int index = imageIndexes.indexOf(fileName);
+        
+        if (index == -1)
+            return null;
+        
+        ImageView imageView = new ImageView(images.get(index));
+        
+        return imageView;
     }
 }

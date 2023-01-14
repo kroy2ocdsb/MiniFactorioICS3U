@@ -31,6 +31,7 @@ public class MiniFactorio extends Application {
     public static Graphics graphics;
     public static World world;
     public static boolean showShed = false;
+    public static Stage mainStage;
     
     /**
      * @param args the command line arguments
@@ -45,50 +46,37 @@ public class MiniFactorio extends Application {
     }
     
     public void start(Stage stage) throws FileNotFoundException {
+        mainStage = stage;
+        
         stage.setResizable(false);
+        
+        // Import images
+        MediaLoader.importImages("C:\\Users\\keega\\Downloads", new String[] {"tile2.png", "shed1.png", "jeremy.png"});
         
         // Make elements
         Environment curEnv = world.getCurEnvironment();
         Pane pane = new Pane();
         
-        Image tileImage = MediaLoader.importImage("C:\\Users\\keega\\Downloads\\tile2.png");
-        
         // Graphics settings
         int tileSize = Graphics.TILE_SIZE;
-        
-        // Load tile image
-       /* FileInputStream inputstream;
-        Image tileImage = null;
-        try {
-            inputstream = new FileInputStream("C:\\Users\\keega\\Downloads\\tile2.png");
-            tileImage = new Image(inputstream); 
-        }
-        catch (Exception e) {
-            System.out.println("Tile image not loaded!");
-        }*/
         
         // Make grid of tiles
         for (int x = 0; x < curEnv.X_SIZE; x++) {
             for (int y = 0; y < curEnv.Y_SIZE; y++) {
-                ImageView tile = new ImageView(tileImage);
-                tile.setX(x*(tileSize-0));
-                tile.setY(y*(tileSize));
+                ImageView tileView = MediaLoader.viewImage("tile2.png");
                 
-                curEnv.grid[x][y].node = tile;
+                tileView.setX(x*(tileSize-0));
+                tileView.setY(y*(tileSize));
+                
+                curEnv.grid[x][y].node = tileView;
 
-                /*Rectangle tile = new Rectangle(
-                        x*(tileSize+tilePadding)+tilePadding,
-                        y*(tileSize+tilePadding)+tilePadding,
-                        tileSize-tilePadding*2,
-                        tileSize-tilePadding*2
-                );*/
-                pane.getChildren().add(tile);
+                
+                pane.getChildren().add(tileView);
             }
         }
         
         // Load shed image
-        Image shedImage = MediaLoader.importImage("C:\\Users\\keega\\Downloads\\shed1.png");
-        ImageView shedView = new ImageView(shedImage);
+        ImageView shedView = MediaLoader.viewImage("shed1.png");
         Point2D shedPos = Graphics.pixelPosition(2,1);
         shedView.setX(shedPos.getX());
         shedView.setY(shedPos.getY());
@@ -104,22 +92,51 @@ public class MiniFactorio extends Application {
         stage.setScene(scene);
         stage.show();
         
-        
         curEnv.contents.add(shed);
+        
+        // Make player
+        Player player = new Player();
+        curEnv.contents.add(0,player.playerEntity);
+        pane.getChildren().add(player.playerEntity.node);
         
         // Keybinds
         stage.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> { // Remember addEventHandler() can be used on any stage or scene!!
-            if (key.getCode() == KeyCode.A) {
+            if (key.getCode() == KeyCode.G) {
                 showShed = !showShed;
-                System.out.println(curEnv.contents.get(0));
-                curEnv.contents.get(0).node.setVisible(showShed);
+                //System.out.println(curEnv.contents.get(1));
+                curEnv.contents.get(1).node.setVisible(showShed);
             }
             else if (key.getCode() == KeyCode.Q) {
                 stage.close();
             }
         });
         
-        /*Circle circle = new Circle();
+        PlayerInput.start(player, stage);
+    }
+}
+
+/* Old code dump:
+// Load tile image
+       /* FileInputStream inputstream;
+        Image tileImage = null;
+        try {
+            inputstream = new FileInputStream("C:\\Users\\keega\\Downloads\\tile2.png");
+            tileImage = new Image(inputstream); 
+        }
+        catch (Exception e) {
+            System.out.println("Tile image not loaded!");
+        }*/
+
+
+/*Rectangle tile = new Rectangle(
+                        x*(tileSize+tilePadding)+tilePadding,
+                        y*(tileSize+tilePadding)+tilePadding,
+                        tileSize-tilePadding*2,
+                        tileSize-tilePadding*2
+                );*/
+
+
+/*Circle circle = new Circle();
         circle.setCenterX(200);
         circle.setCenterY(150);
         circle.setRadius(100);
@@ -147,5 +164,7 @@ public class MiniFactorio extends Application {
         stage.setTitle("Drawing a circle!");
         stage.setScene(scene);
         stage.show();*/
-    }
-}
+
+
+
+*/
