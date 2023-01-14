@@ -28,9 +28,9 @@ import javafx.scene.Node;
  * @author keega
  */
 public class MiniFactorio extends Application {
-    public static Graphics graphics;
+    //public static Graphics graphics;
     public static World world;
-    public static boolean showShed = false;
+    public static boolean showShed = true;
     public static Stage mainStage;
     
     /**
@@ -38,7 +38,7 @@ public class MiniFactorio extends Application {
      * @throws java.lang.Exception
      */
     public static void main(String[] args) throws Exception {
-        Environment environment = new Environment(10,8);
+        Environment environment = new Environment(Graphics.WORLD_WIDTH, Graphics.WORLD_HEIGHT);
         
         world = new World(new Environment[] {environment}, 0);
         
@@ -51,7 +51,7 @@ public class MiniFactorio extends Application {
         stage.setResizable(false);
         
         // Import images
-        MediaLoader.importImages("C:\\Users\\keega\\Downloads", new String[] {"tile2.png", "shed1.png", "jeremy.png"});
+        MediaLoader.importImages("C:\\Users\\keega\\Downloads", new String[] {"shed1.png", "jeremy.png", "grass1.png", "iron1.png", "copper1.png"});
         
         // Make elements
         Environment curEnv = world.getCurEnvironment();
@@ -63,13 +63,12 @@ public class MiniFactorio extends Application {
         // Make grid of tiles
         for (int x = 0; x < curEnv.X_SIZE; x++) {
             for (int y = 0; y < curEnv.Y_SIZE; y++) {
-                ImageView tileView = MediaLoader.viewImage("tile2.png");
+                ImageView tileView = MediaLoader.viewImage("grass1.png");
                 
-                tileView.setX(x*(tileSize-0));
-                tileView.setY(y*(tileSize));
+                Point2D tilePos = Graphics.pixelPosition(x, y);
+                Graphics.positionAt(tileView, tilePos);
                 
                 curEnv.grid[x][y].node = tileView;
-
                 
                 pane.getChildren().add(tileView);
             }
@@ -78,9 +77,8 @@ public class MiniFactorio extends Application {
         // Load shed image
         ImageView shedView = MediaLoader.viewImage("shed1.png");
         Point2D shedPos = Graphics.pixelPosition(2,1);
-        shedView.setX(shedPos.getX());
-        shedView.setY(shedPos.getY());
-        shedView.setVisible(false);
+        Graphics.positionAt(shedView, shedPos);
+        shedView.setVisible(showShed);
         
         pane.getChildren().add(shedView);
         
@@ -96,14 +94,13 @@ public class MiniFactorio extends Application {
         
         // Make player
         Player player = new Player();
-        curEnv.contents.add(0,player.playerEntity);
-        pane.getChildren().add(player.playerEntity.node);
+        curEnv.contents.add(0,player);
+        pane.getChildren().add(player.node);
         
         // Keybinds
         stage.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> { // Remember addEventHandler() can be used on any stage or scene!!
             if (key.getCode() == KeyCode.G) {
                 showShed = !showShed;
-                //System.out.println(curEnv.contents.get(1));
                 curEnv.contents.get(1).node.setVisible(showShed);
             }
             else if (key.getCode() == KeyCode.Q) {
@@ -112,6 +109,14 @@ public class MiniFactorio extends Application {
         });
         
         PlayerInput.start(player, stage);
+        
+        
+        // Add ores
+        new Ore("iron", new Point2D(0, 0));
+        new Ore("iron", new Point2D(Graphics.WORLD_WIDTH-1, Graphics.WORLD_HEIGHT-1));
+        new Ore("copper", new Point2D(0, Graphics.WORLD_HEIGHT-1));
+        new Ore("copper", new Point2D(Graphics.WORLD_WIDTH-1, 0));
+        player.node.toFront();
     }
 }
 
@@ -166,5 +171,9 @@ public class MiniFactorio extends Application {
         stage.show();*/
 
 
+/*System.out.println(Graphics.removeEntity(curEnv.grid[0][0]));
+        curEnv.grid[0][0] = null;*/
 
+
+//System.out.println(String.format("X: %d   Y: %d", curEnv.grid.length, curEnv.grid[0].length));
 */

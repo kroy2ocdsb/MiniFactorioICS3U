@@ -9,6 +9,7 @@ import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.*;
 import javafx.scene.shape.*;
 
@@ -18,6 +19,8 @@ import javafx.scene.shape.*;
  */
 public class Graphics {
     final static int TILE_SIZE = 50;
+    final static int WORLD_WIDTH = 10;
+    final static int WORLD_HEIGHT = 8;
     
     public static Point2D pixelPosition(int x, int y) {
         return new Point2D(
@@ -68,5 +71,32 @@ public class Graphics {
     
     public static Rectangle2D newRectSize(Rectangle2D rect, Point2D vector) {
         return newRectSize(rect, vector.getX(), vector.getY());
+    }
+    
+    public static void addEntity(Entity entity) {
+        if (entity.node == null)
+            return;
+        
+        Pane pane = (Pane)MiniFactorio.mainStage.getScene().getRoot();
+        
+        pane.getChildren().add(entity.node);
+    }
+    
+    // Permanently deletes an entity from the current Scene.
+    public static boolean removeEntity(Entity entity) {
+        Pane pane = (Pane)MiniFactorio.mainStage.getScene().getRoot();
+        
+        if (entity.node != null) {
+            int index = pane.getChildren().indexOf(entity.node);
+            
+            if (index == -1)
+                return false;
+            
+            pane.getChildren().remove(index);
+            
+            return true;
+        }
+        
+        return false;
     }
 }

@@ -13,7 +13,7 @@ import javafx.scene.Node;
  * @author keega
  */
 public class Entity {
-    public Rectangle2D rect;
+    public Rectangle2D rect; // Rectangle in grid tile units to describe the position and size of this entity
     
     public Node node;
     

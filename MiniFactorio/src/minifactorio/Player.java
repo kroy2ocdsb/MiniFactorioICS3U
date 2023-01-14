@@ -13,18 +13,17 @@ import javafx.scene.image.ImageView;
  *
  * @author keega
  */
-public class Player {
+public class Player extends Entity {
     Point2D position;
-    Entity playerEntity;
     
     public Player() {
-        position = new Point2D(0,0);
+        super(0, 0, 1, 1);
         
-        playerEntity = new Entity(0, 0, 1, 1);
+        position = new Point2D(0,0);
         
         ImageView playerView = MediaLoader.viewImage("jeremy.png");
         
-        playerEntity.node = playerView;
+        node = playerView;
         
         updatePosition();
     }
@@ -38,22 +37,17 @@ public class Player {
             return false; // Cannot move less than one full tile
         
         Point2D newPosition = position.add(vector);
-        Rectangle2D newRect = new Rectangle2D(
-                newPosition.getX(),
-                newPosition.getY(),
-                playerEntity.rect.getWidth(),
-                playerEntity.rect.getHeight()
-        );
-        
-        if (newPosition.getX() < 0 || newPosition.getY() < 0 || newPosition.getX() >= 10 || newPosition.getY() >= 8)
-            return false; // Out of world bounds
+        Rectangle2D newRect = Graphics.newRectSize(rect, newPosition);
         
         Environment curEnv = MiniFactorio.world.getCurEnvironment();
         ArrayList<Entity> contents = curEnv.contents;
         
+        if (newPosition.getX() < 0 || newPosition.getY() < 0 || newPosition.getX() >= curEnv.grid.length || newPosition.getY() >= curEnv.grid[0].length)
+            return false; // Out of world bounds
+        
         // Check collisions
         for (int i = 0; i < contents.size(); i++) {
-            if (contents.get(i) == playerEntity)
+            if (contents.get(i) == this)
                 continue;
             if (Physics.checkGridCollision(newRect, contents.get(i).rect)) {
                 //System.out.println("Player collided with " + contents.get(i));
@@ -74,14 +68,9 @@ public class Player {
     
     public void updatePosition() {
         Point2D pixelPosition = Graphics.pixelPosition(position);
-        ((ImageView)playerEntity.node).setX(pixelPosition.getX());
-        ((ImageView)playerEntity.node).setY(pixelPosition.getY());
+        ((ImageView)node).setX(pixelPosition.getX());
+        ((ImageView)node).setY(pixelPosition.getY());
         
-        playerEntity.rect = new Rectangle2D(
-                position.getX(),
-                position.getY(),
-                playerEntity.rect.getWidth(),
-                playerEntity.rect.getHeight()
-        );
+        rect = Graphics.newRectSize(rect, position);
     }
 }
