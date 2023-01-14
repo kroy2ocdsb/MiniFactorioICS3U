@@ -34,7 +34,7 @@ public class MediaLoader { // Important: ALL IMAGES NEED UNIQUE NAMES
             image = new Image(inputstream); 
         }
         catch (Exception e) {
-            System.out.println("Image not loaded!");
+            System.out.println("Image " + filePath + " not loaded!");
         }
         
         if (image != null) {

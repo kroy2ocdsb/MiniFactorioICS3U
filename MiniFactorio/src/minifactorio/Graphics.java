@@ -6,7 +6,9 @@ package minifactorio;
  */
 
 import javafx.geometry.Point2D;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.*;
 import javafx.scene.shape.*;
 
@@ -45,5 +47,26 @@ public class Graphics {
                 (int)point.getX(),
                 (int)point.getY()
         );
+    }
+    
+    
+    public static ImageView positionAt(ImageView imageView, Point2D position) {
+        imageView.setX(position.getX());
+        imageView.setY(position.getY());
+        
+        return imageView;
+    }
+    
+    public static Rectangle2D newRectSize(Rectangle2D rect, double newX, double newY) {
+        return new Rectangle2D(
+                newX,
+                newY,
+                rect.getWidth(),
+                rect.getHeight()
+        );
+    }
+    
+    public static Rectangle2D newRectSize(Rectangle2D rect, Point2D vector) {
+        return newRectSize(rect, vector.getX(), vector.getY());
     }
 }
