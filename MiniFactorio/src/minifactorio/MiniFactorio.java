@@ -18,6 +18,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.FileInputStream;
+import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 
@@ -50,11 +51,13 @@ public class MiniFactorio extends Application {
         Environment curEnv = world.getCurEnvironment();
         Pane pane = new Pane();
         
+        Image tileImage = MediaLoader.importImage("C:\\Users\\keega\\Downloads\\tile2.png");
+        
         // Graphics settings
         int tileSize = Graphics.TILE_SIZE;
         
         // Load tile image
-        FileInputStream inputstream;
+       /* FileInputStream inputstream;
         Image tileImage = null;
         try {
             inputstream = new FileInputStream("C:\\Users\\keega\\Downloads\\tile2.png");
@@ -62,7 +65,7 @@ public class MiniFactorio extends Application {
         }
         catch (Exception e) {
             System.out.println("Tile image not loaded!");
-        }
+        }*/
         
         // Make grid of tiles
         for (int x = 0; x < curEnv.X_SIZE; x++) {
@@ -84,18 +87,11 @@ public class MiniFactorio extends Application {
         }
         
         // Load shed image
-        Image shedImage = null;
-        try {
-            inputstream = new FileInputStream("C:\\Users\\keega\\Downloads\\shed1.png");
-            shedImage = new Image(inputstream); 
-        }
-        catch (Exception e) {
-            System.out.println("Shed image not loaded!");
-        }
+        Image shedImage = MediaLoader.importImage("C:\\Users\\keega\\Downloads\\shed1.png");
         ImageView shedView = new ImageView(shedImage);
-        Rectangle2D shedPos = Graphics.pixelPosition(2,1);
-        shedView.setX(shedPos.getMinX());
-        shedView.setY(shedPos.getMinY());
+        Point2D shedPos = Graphics.pixelPosition(2,1);
+        shedView.setX(shedPos.getX());
+        shedView.setY(shedPos.getY());
         shedView.setVisible(false);
         
         pane.getChildren().add(shedView);
@@ -112,11 +108,14 @@ public class MiniFactorio extends Application {
         curEnv.contents.add(shed);
         
         // Keybinds
-        scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
+        stage.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> { // Remember addEventHandler() can be used on any stage or scene!!
             if (key.getCode() == KeyCode.A) {
                 showShed = !showShed;
                 System.out.println(curEnv.contents.get(0));
                 curEnv.contents.get(0).node.setVisible(showShed);
+            }
+            else if (key.getCode() == KeyCode.Q) {
+                stage.close();
             }
         });
         
