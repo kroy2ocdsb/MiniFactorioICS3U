@@ -5,6 +5,7 @@
 package minifactorio;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.ImageView;
@@ -15,11 +16,17 @@ import javafx.scene.image.ImageView;
  */
 public class Player extends Entity {
     Point2D position;
+    String oreOn = "";
+    HashMap<String, Integer> inventory;
     
     public Player() {
         super(0, 0, 1, 1);
         
         position = new Point2D(0,0);
+        inventory = new HashMap<String, Integer>();
+        inventory.put("iron",0);
+        inventory.put("copper",0);
+        inventory.put("circuit",0);
         
         ImageView playerView = MediaLoader.viewImage("jeremy.png");
         
@@ -72,5 +79,32 @@ public class Player extends Entity {
         ((ImageView)node).setY(pixelPosition.getY());
         
         rect = Graphics.newRectSize(rect, position);
+        
+        // Check for ores to mine
+        Entity tileOn = MiniFactorio.world.getCurEnvironment().grid[(int)rect.getMinX()][(int)rect.getMinY()];
+        
+        oreOn = "";
+        
+        if (tileOn instanceof Ore) {
+            Graphics.updateBottomBar("Press M to mine " + ((Ore)tileOn).oreType + "!");
+            oreOn = ((Ore)tileOn).oreType;
+        }
+        // Check for buildings to interact with
+        else {
+            Graphics.updateBottomBar("");
+        }
+    }
+    
+    public void mine() {
+        if (oreOn != "") {
+            inventory.put(oreOn,inventory.get(oreOn) + 1);
+            
+            Graphics.updateTopBar(String.format(
+                    "Iron: %s Copper: %s Circuit: %s",
+                    Graphics.trailingSpaces(inventory.get("iron").toString(), 5),
+                    Graphics.trailingSpaces(inventory.get("copper").toString(), 5),
+                    inventory.get("circuit").toString()
+            ));
+        }
     }
 }

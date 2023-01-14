@@ -21,6 +21,8 @@ import java.io.FileInputStream;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 
 
 /**
@@ -86,16 +88,12 @@ public class MiniFactorio extends Application {
         shed.node = shedView;
         
         // Make + render scene
-        Scene scene = new Scene(pane, curEnv.X_SIZE*tileSize, curEnv.Y_SIZE*tileSize);
+        Scene scene = new Scene(pane, curEnv.X_SIZE*tileSize, curEnv.Y_SIZE*tileSize + (Graphics.TOPBAR_SIZE + Graphics.BOTTOMBAR_SIZE));
         stage.setScene(scene);
+        stage.setTitle("Mini Factorio for ICS3U! Meet Jeremy <3");
         stage.show();
         
         curEnv.contents.add(shed);
-        
-        // Make player
-        Player player = new Player();
-        curEnv.contents.add(0,player);
-        pane.getChildren().add(player.node);
         
         // Keybinds
         stage.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> { // Remember addEventHandler() can be used on any stage or scene!!
@@ -108,14 +106,25 @@ public class MiniFactorio extends Application {
             }
         });
         
-        PlayerInput.start(player, stage);
-        
         
         // Add ores
         new Ore("iron", new Point2D(0, 0));
         new Ore("iron", new Point2D(Graphics.WORLD_WIDTH-1, Graphics.WORLD_HEIGHT-1));
         new Ore("copper", new Point2D(0, Graphics.WORLD_HEIGHT-1));
         new Ore("copper", new Point2D(Graphics.WORLD_WIDTH-1, 0));
+        
+        // Load top + bottom bars
+        Graphics.loadBars(pane);
+        
+        
+        // Make player
+        Player player = new Player();
+        curEnv.contents.add(0,player);
+        pane.getChildren().add(player.node);
+        
+        // Listen for player input
+        PlayerInput.start(player, stage);
+        
         player.node.toFront();
     }
 }

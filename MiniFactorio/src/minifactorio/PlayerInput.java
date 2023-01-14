@@ -56,6 +56,10 @@ public class PlayerInput {
         else if (key.equals("D")) {
             player.move(new Point2D(1,0));
         }
+        
+        else if (key.equals("M")) {
+            player.mine();
+        }
     }
     
     public static void keyReleased(String key) {
