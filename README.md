@@ -1,1 +1,1 @@
-# MiniFactorioICS3U
+# Mini Factorio game for ICS3U
