@@ -53,7 +53,13 @@ public class MiniFactorio extends Application {
         stage.setResizable(false);
         
         // Import images
-        MediaLoader.importImages("C:\\Users\\keega\\Downloads", new String[] {"shed1.png", "jeremy.png", "grass1.png", "iron1.png", "copper1.png"});
+        String imageDirectory = getClass().getResource("images").getPath();
+        imageDirectory = imageDirectory.replace("/", "\\").substring(1);
+        imageDirectory = imageDirectory.replace("%20", " ");
+        MediaLoader.importImages(imageDirectory, new String[] {
+            "jeremy.png", "grass1.png", "iron1.png", "copper1.png", "smeltIron1.png", "smeltCopper1.png"
+        }, new Point2D(1, 1));
+        MediaLoader.importImage(imageDirectory + "\\building2.png", new Point2D(2, 2));
         
         // Make elements
         Environment curEnv = world.getCurEnvironment();
@@ -70,22 +76,22 @@ public class MiniFactorio extends Application {
                 Point2D tilePos = Graphics.pixelPosition(x, y);
                 Graphics.positionAt(tileView, tilePos);
                 
-                curEnv.grid[x][y].node = tileView;
+                curEnv.grid[x][y].setNode(tileView);
                 
                 pane.getChildren().add(tileView);
             }
         }
         
         // Load shed image
-        ImageView shedView = MediaLoader.viewImage("shed1.png");
+        /*ImageView shedView = MediaLoader.viewImage("building2.png");
         Point2D shedPos = Graphics.pixelPosition(2,1);
         Graphics.positionAt(shedView, shedPos);
-        shedView.setVisible(showShed);
+        shedView.setVisible(showShed);*/
         
-        pane.getChildren().add(shedView);
+        //pane.getChildren().add(shedView);
         
-        Entity shed = new Entity(new Rectangle2D(2,1, 2, 2));
-        shed.node = shedView;
+        //Entity shed = new Entity(new Rectangle2D(2,1, 2, 2));
+        //shed.setNode(shedView);
         
         // Make + render scene
         Scene scene = new Scene(pane, curEnv.X_SIZE*tileSize, curEnv.Y_SIZE*tileSize + (Graphics.TOPBAR_SIZE + Graphics.BOTTOMBAR_SIZE));
@@ -93,7 +99,7 @@ public class MiniFactorio extends Application {
         stage.setTitle("Mini Factorio for ICS3U! Meet Jeremy <3");
         stage.show();
         
-        curEnv.contents.add(shed);
+        //curEnv.contents.add(shed);
         
         // Keybinds
         stage.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> { // Remember addEventHandler() can be used on any stage or scene!!
@@ -113,6 +119,9 @@ public class MiniFactorio extends Application {
         new Ore("copper", new Point2D(0, Graphics.WORLD_HEIGHT-1));
         new Ore("copper", new Point2D(Graphics.WORLD_WIDTH-1, 0));
         
+        // Smelter
+        new Smelter(new Point2D(2, 1));
+        
         // Load top + bottom bars
         Graphics.loadBars(pane);
         
@@ -127,6 +136,10 @@ public class MiniFactorio extends Application {
         
         player.node.toFront();
     }
+    
+    public static int getTime() {
+        return (int)(System.currentTimeMillis());
+    } 
 }
 
 /* Old code dump:

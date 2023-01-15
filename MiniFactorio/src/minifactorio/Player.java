@@ -17,6 +17,9 @@ import javafx.scene.image.ImageView;
 public class Player extends Entity {
     Point2D position;
     String oreOn = "";
+    Entity interactingBuilding = null;
+    String buildingSlot = "";
+    
     HashMap<String, Integer> inventory;
     
     public Player() {
@@ -24,8 +27,10 @@ public class Player extends Entity {
         
         position = new Point2D(0,0);
         inventory = new HashMap<String, Integer>();
-        inventory.put("iron",0);
-        inventory.put("copper",0);
+        inventory.put("ironOre",0);
+        inventory.put("copperOre",0);
+        inventory.put("ironBar",0);
+        inventory.put("copperBar",0);
         inventory.put("circuit",0);
         
         ImageView playerView = MediaLoader.viewImage("jeremy.png");
@@ -33,6 +38,7 @@ public class Player extends Entity {
         node = playerView;
         
         updatePosition();
+        updateInventoryText();
     }
     
     // Returns true if the player moved, false if the player could not move with the given vector.
@@ -80,6 +86,10 @@ public class Player extends Entity {
         
         rect = Graphics.newRectSize(rect, position);
         
+        updateTooltip();
+    }
+    
+    public void updateTooltip() {
         // Check for ores to mine
         Entity tileOn = MiniFactorio.world.getCurEnvironment().grid[(int)rect.getMinX()][(int)rect.getMinY()];
         
@@ -87,24 +97,61 @@ public class Player extends Entity {
         
         if (tileOn instanceof Ore) {
             Graphics.updateBottomBar("Press M to mine " + ((Ore)tileOn).oreType + "!");
-            oreOn = ((Ore)tileOn).oreType;
+            oreOn = ((Ore)tileOn).oreType + "Ore";
         }
+        
         // Check for buildings to interact with
-        else {
-            Graphics.updateBottomBar("");
+        else if (tileOn instanceof SmelterTile) {
+            String slot = ((SmelterTile) tileOn).slot;
+            
+            interactingBuilding = null;
+            buildingSlot = "";
+            
+            if (inventory.get(slot + "Ore") > 0) {
+                Graphics.updateBottomBar("Press E to smelt " + slot + " ore into a bar!");
+                
+                interactingBuilding = ((SmelterTile) tileOn).smelter;
+                buildingSlot = slot;
+            }
+            else {
+                Graphics.updateBottomBar("You need more " + slot + " ore to do this!");
+            }
         }
+        // No tooltip to display
+        else
+            Graphics.updateBottomBar("");
     }
     
     public void mine() {
         if (oreOn != "") {
             inventory.put(oreOn,inventory.get(oreOn) + 1);
+            updateInventoryText();
+        }
+    }
+    
+    public void smelt() {
+        if (interactingBuilding != null && buildingSlot != "") {
+            String ore = buildingSlot + "Ore";
+            String bar = buildingSlot + "Bar";
             
-            Graphics.updateTopBar(String.format(
-                    "Iron: %s Copper: %s Circuit: %s",
-                    Graphics.trailingSpaces(inventory.get("iron").toString(), 5),
-                    Graphics.trailingSpaces(inventory.get("copper").toString(), 5),
+            if (inventory.get(ore) > 0) {
+                inventory.put(ore, inventory.get(ore) - 1);
+                inventory.put(bar, inventory.get(bar) + 1);
+                
+                updateInventoryText();
+                updateTooltip();
+            }
+        }
+    }
+    
+    public void updateInventoryText() {
+        Graphics.updateTopBar(String.format(
+                    "Iron Ore: %s Copper Ore: %s\nIron Bar: %s Copper Bar: %s Circuit: %s",
+                    Graphics.trailingSpaces(inventory.get("ironOre").toString(), 5),
+                    inventory.get("copperOre").toString(),
+                    Graphics.trailingSpaces(inventory.get("ironBar").toString(), 5),
+                    Graphics.trailingSpaces(inventory.get("copperBar").toString(), 5),
                     inventory.get("circuit").toString()
             ));
-        }
     }
 }

@@ -11,6 +11,7 @@ import javafx.scene.image.ImageView;
 
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import javafx.geometry.Point2D;
 
 /**
  *
@@ -22,7 +23,7 @@ public class MediaLoader { // Important: ALL IMAGES NEED UNIQUE NAMES
     
     public static Pattern fileNamePattern = Pattern.compile("([^\\\\]+)$");
     
-    public static Image importImage(String filePath) {
+    public static Image importImage(String filePath, Point2D scale) {
         Matcher fileNameMatcher = fileNamePattern.matcher(filePath);
         fileNameMatcher.find();
         String fileName = fileNameMatcher.group(1);
@@ -31,7 +32,7 @@ public class MediaLoader { // Important: ALL IMAGES NEED UNIQUE NAMES
         Image image = null;
         try {
             inputstream = new FileInputStream(filePath);
-            image = new Image(inputstream); 
+            image = new Image(inputstream, Graphics.TILE_SIZE * scale.getX(), Graphics.TILE_SIZE * scale.getY(), true, false); 
         }
         catch (Exception e) {
             System.out.println("Image " + filePath + " not loaded!");
@@ -46,11 +47,11 @@ public class MediaLoader { // Important: ALL IMAGES NEED UNIQUE NAMES
         return image;
     }
     
-    public static Image[] importImages(String filePath, String[] fileNames) {
+    public static Image[] importImages(String filePath, String[] fileNames, Point2D scale) {
         Image[] images = new Image[fileNames.length];
         
         for (int i = 0; i < fileNames.length; i++) {
-            images[i] = importImage(filePath + "\\" + fileNames[i]);
+            images[i] = importImage(filePath + "\\" + fileNames[i], scale);
         }
         
         return images;

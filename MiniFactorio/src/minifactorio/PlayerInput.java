@@ -4,6 +4,7 @@
  */
 package minifactorio;
 
+// Help from https://stackoverflow.com/questions/732034/getting-unixtime-in-java
 import java.util.HashMap; // Help from https://stackoverflow.com/questions/37472273/detect-single-key-press-in-javafx
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
@@ -19,19 +20,24 @@ public class PlayerInput {
     public static Stage mainStage;
     
     private static HashMap<String, Boolean> currentlyActiveKeys = new HashMap<>();
+    private static HashMap<String, Integer> lastActiveKeys = new HashMap<>();
     
-    public static boolean canMove = false;
+    public static boolean canMove = true;
     
     public static void start(Player _player, Stage _mainStage) {
         player = _player;
         mainStage = _mainStage;
-        
         // Key down
         mainStage.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
             String codeString = key.getCode().toString();
             if (!currentlyActiveKeys.containsKey(codeString)) {
                 currentlyActiveKeys.put(codeString, true);
+                lastActiveKeys.put(codeString, Integer.valueOf(MiniFactorio.getTime()));
                 keyPressed(codeString);
+            }
+            else if ((MiniFactorio.getTime()-(lastActiveKeys.get(codeString).doubleValue())) > 100){
+                keyPressed(codeString);
+                lastActiveKeys.put(codeString, Integer.valueOf(MiniFactorio.getTime()));
             }
         });
         
@@ -39,26 +45,31 @@ public class PlayerInput {
         mainStage.addEventHandler(KeyEvent.KEY_RELEASED, (key) -> {
             String codeString = key.getCode().toString();
             currentlyActiveKeys.remove(codeString);
+            lastActiveKeys.remove(codeString);
             keyReleased(codeString);
         });
     }
     
     public static void keyPressed(String key) {
-        if (key.equals("W")) {
+        if (canMove && key.equals("W")) {
             player.move(new Point2D(0, -1));
         }
-        else if (key.equals("S")) {
+        else if (canMove && key.equals("S")) {
             player.move(new Point2D(0, 1));
         }
-        else if (key.equals("A")) {
+        else if (canMove && key.equals("A")) {
             player.move(new Point2D(-1,0));
         }
-        else if (key.equals("D")) {
+        else if (canMove && key.equals("D")) {
             player.move(new Point2D(1,0));
         }
         
-        else if (key.equals("M")) {
+        else if (canMove && key.equals("M")) {
             player.mine();
+        }
+        
+        else if (canMove && key.equals("E")) {
+            player.smelt();
         }
     }
     

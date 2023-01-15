@@ -28,4 +28,8 @@ public class Entity {
     public Entity() {
         this(new Rectangle2D(0, 0, 0, 0));
     }
+    
+    public void setNode(Node _node) {
+        node = _node;
+    }
 }

@@ -7,6 +7,7 @@ package minifactorio;
 
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
+import javafx.geometry.VPos;
 import javafx.scene.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -14,6 +15,7 @@ import javafx.scene.paint.*;
 import javafx.scene.shape.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 
 /**
  *
@@ -22,7 +24,7 @@ import javafx.scene.text.Text;
 public class Graphics {
     final static int TILE_SIZE = 50;
     
-    final static int TOPBAR_SIZE = 35;    
+    final static int TOPBAR_SIZE = 60;    
     final static int BOTTOMBAR_SIZE = 35;
     
     final static int WORLD_WIDTH = 10;
@@ -89,6 +91,10 @@ public class Graphics {
         return text + (" ".repeat(numSpaces - text.length()));
     }
     
+    public static Rectangle2D fromPoint(Point2D point) {
+        return new Rectangle2D(point.getX(), point.getY(), 1, 1);
+    }
+    
     
     /// Environment editing methods
     public static void addEntity(Entity entity) {
@@ -118,6 +124,14 @@ public class Graphics {
         return false;
     }
     
+    // Replace a tile with another (eg. ore, input slots)
+    public static void replaceTile(Entity oldTile, Entity newTile, Point2D position) {
+        removeEntity(oldTile);
+        addEntity(newTile);
+        
+        MiniFactorio.world.getCurEnvironment().grid[(int)position.getX()][(int)position.getY()] = newTile;
+    }
+    
     
     /// Initialization methods
     public static void loadBars(Pane pane) {
@@ -125,7 +139,9 @@ public class Graphics {
         int screenWidth = TILE_SIZE * WORLD_WIDTH;
         topBar = new Rectangle(screenWidth, TOPBAR_SIZE, Color.GRAY);
         topBarText = new Text();
+        topBarText.setTextOrigin(VPos.TOP);
         topBarText.setFont(Font.font("Consolas", 20));
+        topBarText.setTextAlignment(TextAlignment.CENTER);
         
         updateTopBar("Iron: 0     Copper: 0     Circuit: 0");
         
@@ -134,26 +150,30 @@ public class Graphics {
         // Bottom bar
         bottomBar = new Rectangle(screenWidth, BOTTOMBAR_SIZE, Color.GRAY);
         bottomBar.setX(0);
-        bottomBar.setY(TILE_SIZE * (WORLD_HEIGHT) + BOTTOMBAR_SIZE);
+        bottomBar.setY(TILE_SIZE * (WORLD_HEIGHT) + TOPBAR_SIZE);
         bottomBarText = new Text();
+        bottomBarText.setTextOrigin(VPos.BOTTOM);
         bottomBarText.setFont(Font.font("Consolas", 20));
         
         updateBottomBar("");
         
         pane.getChildren().addAll(bottomBar, bottomBarText);
+        
+        System.out.println(topBarText.getTextOrigin());
+        System.out.println(bottomBarText.getTextOrigin());
     }
     
     public static void updateTopBar(String text) {
         topBarText.setText(text);
         
         topBarText.setX(TILE_SIZE * WORLD_WIDTH/2-topBarText.getLayoutBounds().getWidth()/2);
-        topBarText.setY(23);
+        topBarText.setY(10);
     }
     
     public static void updateBottomBar(String text) {
         bottomBarText.setText(text);
         
         bottomBarText.setX(TILE_SIZE * WORLD_WIDTH/2-bottomBarText.getLayoutBounds().getWidth()/2);
-        bottomBarText.setY(10 + TILE_SIZE * (WORLD_HEIGHT + 1));
+        bottomBarText.setY((TILE_SIZE * (WORLD_HEIGHT)) + TOPBAR_SIZE + BOTTOMBAR_SIZE - 6);// + TOPBAR_SIZE - BOTTOMBAR_SIZE - 5);
     }
 }

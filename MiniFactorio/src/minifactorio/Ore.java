@@ -22,17 +22,19 @@ public class Ore extends Entity {
         
         node = Graphics.positionAt(MediaLoader.viewImage(oreType + "1.png"), Graphics.pixelPosition(new Point2D(rect.getMinX(), rect.getMinY())));
         
-        
-        // Remove old tile
+        // Replace grass tile with new
         Entity[][] grid = MiniFactorio.world.getCurEnvironment().grid;
-        
         Entity oldTile = grid[(int)rect.getMinX()][(int)rect.getMinY()];
+        
+        Graphics.replaceTile(oldTile, this, new Point2D(_position.getX(), _position.getY()));
+        // Remove old tile
+        /*
         
         Graphics.removeEntity(grid[(int)rect.getMinX()][(int)rect.getMinY()]);
         
         // Add ore to grid
         grid[(int)rect.getMinX()][(int)rect.getMinY()] = this;
         
-        Graphics.addEntity(this);
+        Graphics.addEntity(this);*/
     }
 }
