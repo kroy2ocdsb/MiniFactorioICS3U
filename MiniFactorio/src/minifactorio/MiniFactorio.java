@@ -30,7 +30,6 @@ import javafx.scene.text.Text;
  * @author keega
  */
 public class MiniFactorio extends Application {
-    //public static Graphics graphics;
     public static World world;
     public static boolean showShed = true;
     public static Stage mainStage;
@@ -82,17 +81,6 @@ public class MiniFactorio extends Application {
             }
         }
         
-        // Load shed image
-        /*ImageView shedView = MediaLoader.viewImage("building2.png");
-        Point2D shedPos = Graphics.pixelPosition(2,1);
-        Graphics.positionAt(shedView, shedPos);
-        shedView.setVisible(showShed);*/
-        
-        //pane.getChildren().add(shedView);
-        
-        //Entity shed = new Entity(new Rectangle2D(2,1, 2, 2));
-        //shed.setNode(shedView);
-        
         // Make + render scene
         Scene scene = new Scene(pane, curEnv.X_SIZE*tileSize, curEnv.Y_SIZE*tileSize + (Graphics.TOPBAR_SIZE + Graphics.BOTTOMBAR_SIZE));
         stage.setScene(scene);
@@ -141,61 +129,3 @@ public class MiniFactorio extends Application {
         return (int)(System.currentTimeMillis());
     } 
 }
-
-/* Old code dump:
-// Load tile image
-       /* FileInputStream inputstream;
-        Image tileImage = null;
-        try {
-            inputstream = new FileInputStream("C:\\Users\\keega\\Downloads\\tile2.png");
-            tileImage = new Image(inputstream); 
-        }
-        catch (Exception e) {
-            System.out.println("Tile image not loaded!");
-        }*/
-
-
-/*Rectangle tile = new Rectangle(
-                        x*(tileSize+tilePadding)+tilePadding,
-                        y*(tileSize+tilePadding)+tilePadding,
-                        tileSize-tilePadding*2,
-                        tileSize-tilePadding*2
-                );*/
-
-
-/*Circle circle = new Circle();
-        circle.setCenterX(200);
-        circle.setCenterY(150);
-        circle.setRadius(100);
-        //circle.setStroke(Color.BLACK);
-        circle.setFill(Color.RED);
-        
-        FileInputStream inputstream;
-        Image chungusImage;
-        ImageView chungus = null;
-        try {
-            inputstream = new FileInputStream("C:\\Users\\keega\\Downloads\\bigchungus-removebg-preview.png");
-            chungusImage = new Image(inputstream); 
-            chungus = new ImageView(chungusImage);
-            chungus.setX(200 - chungusImage.getWidth()/2);
-            chungus.setY(150 - chungusImage.getHeight()/2);
-        }
-        catch (Exception e) {
-            System.out.println("Image not loaded!");
-        }
-        
-        Pane pane = new Pane();
-        pane.getChildren().addAll(circle, chungus);
-        
-        Scene scene = new Scene(pane, 400, 300);
-        stage.setTitle("Drawing a circle!");
-        stage.setScene(scene);
-        stage.show();*/
-
-
-/*System.out.println(Graphics.removeEntity(curEnv.grid[0][0]));
-        curEnv.grid[0][0] = null;*/
-
-
-//System.out.println(String.format("X: %d   Y: %d", curEnv.grid.length, curEnv.grid[0].length));
-*/
