@@ -14,7 +14,7 @@ import javafx.scene.image.ImageView;
 public class Smelter extends Entity {
     
     public Smelter(Point2D _position) {
-        super((int)_position.getX(), (int)_position.getY(), 2,3);
+        super((int)_position.getX(), (int)_position.getY(), 2,2);
         
         node = MediaLoader.viewImage("building2.png");
         Graphics.positionAt((ImageView)node, Graphics.pixelPosition(_position));

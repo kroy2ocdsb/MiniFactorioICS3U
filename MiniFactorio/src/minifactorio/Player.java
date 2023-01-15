@@ -60,7 +60,7 @@ public class Player extends Entity {
         
         // Check collisions
         for (int i = 0; i < contents.size(); i++) {
-            if (contents.get(i) == this)
+            if (contents.get(i) == this || contents.get(i) instanceof SmelterTile)
                 continue;
             if (Physics.checkGridCollision(newRect, contents.get(i).rect)) {
                 //System.out.println("Player collided with " + contents.get(i));
