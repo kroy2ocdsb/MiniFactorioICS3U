@@ -5,10 +5,14 @@ package minifactorio;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
+// Help making button from https://stackoverflow.com/a/69781310
+
+import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.geometry.VPos;
 import javafx.scene.*;
+import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.*;
@@ -25,7 +29,7 @@ public class Graphics {
     final static int TILE_SIZE = 50;
     
     final static int TOPBAR_SIZE = 60;    
-    final static int BOTTOMBAR_SIZE = 35;
+    final static int BOTTOMBAR_SIZE = 55;
     
     final static int WORLD_WIDTH = 10;
     final static int WORLD_HEIGHT = 8;
@@ -137,15 +141,38 @@ public class Graphics {
     public static void loadBars(Pane pane) {
         // Top bar
         int screenWidth = TILE_SIZE * WORLD_WIDTH;
-        topBar = new Rectangle(screenWidth, TOPBAR_SIZE, Color.GRAY);
+        topBar = new Rectangle(screenWidth-60, TOPBAR_SIZE, Color.GRAY);
+        topBar.setX(60);
         topBarText = new Text();
         topBarText.setTextOrigin(VPos.TOP);
-        topBarText.setFont(Font.font("Consolas", 20));
+        topBarText.setFont(Font.font("Consolas", 16));
         topBarText.setTextAlignment(TextAlignment.CENTER);
         
-        updateTopBar("Iron: 0     Copper: 0     Circuit: 0");
+        //updateTopBar("Iron: 0     Copper: 0     Circuit: 0");
         
-        pane.getChildren().addAll(topBar, topBarText);
+        // Top buttons
+        Button loadButton = new Button("Load");
+        loadButton.setLayoutX(0);
+        loadButton.setLayoutY(0);
+        loadButton.setPrefWidth(60);
+        loadButton.setPrefHeight(30);
+        loadButton.setStyle("-fx-background-color:rgb(200,200,225);-fx-background-radius:0");
+        ObservableList<String> s = loadButton.getStylesheets();
+        /*s.forEach((String e) -> {
+            System.out.println(e);
+        });*/
+        System.out.println(s.size());
+        for (int i = 0; i < s.size(); i++) {
+            System.out.println(s.get(i));
+        }
+        Button saveButton = new Button("Save");
+        saveButton.setLayoutX(0);
+        saveButton.setLayoutY(30);
+        saveButton.setPrefWidth(60);
+        saveButton.setPrefHeight(30);
+        saveButton.setStyle("-fx-background-color:rgb(220,200,210);-fx-background-radius:0");
+        
+        pane.getChildren().addAll(topBar, topBarText, loadButton, saveButton);
         
         // Bottom bar
         bottomBar = new Rectangle(screenWidth, BOTTOMBAR_SIZE, Color.GRAY);
@@ -153,7 +180,9 @@ public class Graphics {
         bottomBar.setY(TILE_SIZE * (WORLD_HEIGHT) + TOPBAR_SIZE);
         bottomBarText = new Text();
         bottomBarText.setTextOrigin(VPos.BOTTOM);
-        bottomBarText.setFont(Font.font("Consolas", 20));
+        bottomBarText.setWrappingWidth(screenWidth * 0.9);
+        bottomBarText.setTextAlignment(TextAlignment.CENTER);
+        bottomBarText.setFont(Font.font("Consolas", 18));
         
         updateBottomBar("");
         
@@ -166,7 +195,7 @@ public class Graphics {
     public static void updateTopBar(String text) {
         topBarText.setText(text);
         
-        topBarText.setX(TILE_SIZE * WORLD_WIDTH/2-topBarText.getLayoutBounds().getWidth()/2);
+        topBarText.setX(TILE_SIZE * WORLD_WIDTH/2-topBarText.getLayoutBounds().getWidth()/2 + 30);
         topBarText.setY(10);
     }
     

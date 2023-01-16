@@ -117,6 +117,18 @@ public class Player extends Entity {
                 Graphics.updateBottomBar("You need more " + slot + " ore to do this!");
             }
         }
+        else if (tileOn instanceof CircuitAssemblerTile) {
+            interactingBuilding = null;
+            
+            if (inventory.get("ironBar") >= 1 && inventory.get("copperBar") >= 2) {
+                Graphics.updateBottomBar("Press C to turn 1 iron bar and 2 copper bars into 1 circuit!");
+                
+                interactingBuilding = ((CircuitAssemblerTile) tileOn).assembler;
+            }
+            else {
+                Graphics.updateBottomBar("You need 1 iron bar and 2 copper bars to do this!");
+            }
+        }
         // No tooltip to display
         else
             Graphics.updateBottomBar("");
@@ -137,6 +149,20 @@ public class Player extends Entity {
             if (inventory.get(ore) > 0) {
                 inventory.put(ore, inventory.get(ore) - 1);
                 inventory.put(bar, inventory.get(bar) + 1);
+                
+                updateInventoryText();
+                updateTooltip();
+            }
+        }
+    }
+    
+    public void craftCircuit() {
+        if (interactingBuilding != null && buildingSlot == "") {
+            if (inventory.get("ironBar") >= 1 && inventory.get("copperBar") >= 2) {
+                inventory.put("ironBar", inventory.get("ironBar") - 1);
+                inventory.put("copperBar", inventory.get("copperBar") - 2);
+                
+                inventory.put("circuit", inventory.get("circuit") + 1);
                 
                 updateInventoryText();
                 updateTooltip();

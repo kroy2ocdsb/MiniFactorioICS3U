@@ -56,7 +56,8 @@ public class MiniFactorio extends Application {
         imageDirectory = imageDirectory.replace("/", "\\").substring(1);
         imageDirectory = imageDirectory.replace("%20", " ");
         MediaLoader.importImages(imageDirectory, new String[] {
-            "jeremy.png", "grass1.png", "iron1.png", "copper1.png", "smeltIron1.png", "smeltCopper1.png"
+            "jeremy.png", "grass1.png", "iron1.png", "copper1.png", "smeltIron2.png", "smeltCopper2.png", "craftCircuit4.png",
+            "circuitAssembler1.png"
         }, new Point2D(1, 1));
         MediaLoader.importImage(imageDirectory + "\\building2.png", new Point2D(2, 2));
         
@@ -109,6 +110,9 @@ public class MiniFactorio extends Application {
         
         // Smelter
         new Smelter(new Point2D(2, 1));
+        
+        // Circuit Assembler
+        new CircuitAssembler(new Point2D(5, 2));
         
         // Load top + bottom bars
         Graphics.loadBars(pane);

@@ -12,7 +12,6 @@ import javafx.scene.image.ImageView;
  * @author keega
  */
 public class Smelter extends Entity {
-    
     public Smelter(Point2D _position) {
         super((int)_position.getX(), (int)_position.getY(), 2,2);
         
@@ -22,8 +21,8 @@ public class Smelter extends Entity {
         Point2D ironTilePos = new Point2D(rect.getMinX(), rect.getMinY() + 2);
         Point2D copperTilePos = new Point2D(rect.getMinX() + 1, rect.getMinY() + 2);
         
-        ImageView ironTileV = Graphics.positionAt(MediaLoader.viewImage("smeltIron1.png"), Graphics.pixelPosition(ironTilePos));
-        ImageView copperTileV = Graphics.positionAt(MediaLoader.viewImage("smeltCopper1.png"), Graphics.pixelPosition(copperTilePos));
+        ImageView ironTileV = Graphics.positionAt(MediaLoader.viewImage("smeltIron2.png"), Graphics.pixelPosition(ironTilePos));
+        ImageView copperTileV = Graphics.positionAt(MediaLoader.viewImage("smeltCopper2.png"), Graphics.pixelPosition(copperTilePos));
         
         SmelterTile ironTile = new SmelterTile(Graphics.fromPoint(ironTilePos), this, "iron");
         ironTile.node = ironTileV;

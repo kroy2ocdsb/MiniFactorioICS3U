@@ -71,6 +71,10 @@ public class PlayerInput {
         else if (canMove && key.equals("E")) {
             player.smelt();
         }
+        
+        else if (canMove && key.equals("C")) {
+            player.craftCircuit();
+        }
     }
     
     public static void keyReleased(String key) {
