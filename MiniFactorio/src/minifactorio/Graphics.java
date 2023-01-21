@@ -26,10 +26,12 @@ import javafx.scene.text.TextAlignment;
  * @author keega
  */
 public class Graphics {
-    final static int TILE_SIZE = 50;
+    final static int TILE_SIZE = 75;
     
     final static int TOPBAR_SIZE = 60;    
     final static int BOTTOMBAR_SIZE = 55;
+    
+    final static int TOPBAR_BUTTON_WIDTH = 60;
     
     final static int WORLD_WIDTH = 10;
     final static int WORLD_HEIGHT = 8;
@@ -116,7 +118,7 @@ public class Graphics {
         
         if (entity.node != null) {
             int index = pane.getChildren().indexOf(entity.node);
-            
+              
             if (index == -1)
                 return false;
             
@@ -141,8 +143,8 @@ public class Graphics {
     public static void loadBars(Pane pane) {
         // Top bar
         int screenWidth = TILE_SIZE * WORLD_WIDTH;
-        topBar = new Rectangle(screenWidth-60, TOPBAR_SIZE, Color.GRAY);
-        topBar.setX(60);
+        topBar = new Rectangle(screenWidth-TOPBAR_BUTTON_WIDTH, TOPBAR_SIZE, Color.GRAY);
+        topBar.setX(TOPBAR_BUTTON_WIDTH);
         topBarText = new Text();
         topBarText.setTextOrigin(VPos.TOP);
         topBarText.setFont(Font.font("Consolas", 16));
@@ -154,7 +156,7 @@ public class Graphics {
         Button loadButton = new Button("Load");
         loadButton.setLayoutX(0);
         loadButton.setLayoutY(0);
-        loadButton.setPrefWidth(60);
+        loadButton.setPrefWidth(TOPBAR_BUTTON_WIDTH);
         loadButton.setPrefHeight(30);
         loadButton.setStyle("-fx-background-color:rgb(200,200,225);-fx-background-radius:0");
         ObservableList<String> s = loadButton.getStylesheets();
@@ -168,7 +170,7 @@ public class Graphics {
         Button saveButton = new Button("Save");
         saveButton.setLayoutX(0);
         saveButton.setLayoutY(30);
-        saveButton.setPrefWidth(60);
+        saveButton.setPrefWidth(TOPBAR_BUTTON_WIDTH);
         saveButton.setPrefHeight(30);
         saveButton.setStyle("-fx-background-color:rgb(220,200,210);-fx-background-radius:0");
         

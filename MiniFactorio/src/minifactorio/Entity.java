@@ -14,6 +14,7 @@ import javafx.scene.Node;
  */
 public class Entity {
     public Rectangle2D rect; // Rectangle in grid tile units to describe the position and size of this entity
+    public Rectangle2D collisionRect;
     
     public Node node;
     

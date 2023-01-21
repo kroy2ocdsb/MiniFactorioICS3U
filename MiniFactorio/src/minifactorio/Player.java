@@ -93,13 +93,14 @@ public class Player extends Entity {
         // Check for ores to mine
         Entity tileOn = MiniFactorio.world.getCurEnvironment().grid[(int)rect.getMinX()][(int)rect.getMinY()];
         
+        interactingBuilding = null;
+        buildingSlot = "";
         oreOn = "";
         
         if (tileOn instanceof Ore) {
             Graphics.updateBottomBar("Press M to mine " + ((Ore)tileOn).oreType + "!");
             oreOn = ((Ore)tileOn).oreType + "Ore";
         }
-        
         // Check for buildings to interact with
         else if (tileOn instanceof SmelterTile) {
             String slot = ((SmelterTile) tileOn).slot;
@@ -129,9 +130,24 @@ public class Player extends Entity {
                 Graphics.updateBottomBar("You need 1 iron bar and 2 copper bars to do this!");
             }
         }
+        else if (tileOn instanceof UnlockingTile) {
+            interactingBuilding = null;
+            
+            Unlockable unlockable = ((UnlockingTile) tileOn).unlockable;
+            
+            if (unlockable.meetsReqs(inventory)) {
+                Graphics.updateBottomBar(unlockable.buildTooltip());
+                
+                interactingBuilding = unlockable;
+            }
+            else {
+                Graphics.updateBottomBar(unlockable.collectTooltip());
+            }
+        }
         // No tooltip to display
-        else
+        else {
             Graphics.updateBottomBar("");
+        }
     }
     
     public void mine() {

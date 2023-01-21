@@ -57,13 +57,22 @@ public class MediaLoader { // Important: ALL IMAGES NEED UNIQUE NAMES
         return images;
     }
     
-    public static ImageView viewImage(String fileName) {
+    public static Image getImage(String fileName) {
         int index = imageIndexes.indexOf(fileName);
         
         if (index == -1)
             return null;
         
-        ImageView imageView = new ImageView(images.get(index));
+        return images.get(index);
+    }
+    
+    public static ImageView viewImage(String fileName) {
+        Image image = getImage(fileName);
+        
+        if (image==null)
+            return null;
+        
+        ImageView imageView = new ImageView(image);
         
         return imageView;
     }

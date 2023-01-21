@@ -18,12 +18,13 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.FileInputStream;
+import java.util.HashMap;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-
+JavaFX_2
 
 /**
  *
@@ -85,7 +86,8 @@ public class MiniFactorio extends Application {
         // Make + render scene
         Scene scene = new Scene(pane, curEnv.X_SIZE*tileSize, curEnv.Y_SIZE*tileSize + (Graphics.TOPBAR_SIZE + Graphics.BOTTOMBAR_SIZE));
         stage.setScene(scene);
-        stage.setTitle("Mini Factorio for ICS3U! Meet Jeremy <3");
+        stage.getIcons().add(MediaLoader.getImage("jeremy.png"));
+        stage.setTitle("Mini Factorio by Keegan for ICS3U! Meet Jeremy <3");
         stage.show();
         
         //curEnv.contents.add(shed);
@@ -109,7 +111,11 @@ public class MiniFactorio extends Application {
         new Ore("copper", new Point2D(Graphics.WORLD_WIDTH-1, 0));
         
         // Smelter
-        new Smelter(new Point2D(2, 1));
+        //new Smelter(new Point2D(2, 1));
+        HashMap<String, Integer> smelterReqs = new HashMap<String, Integer>();
+        smelterReqs.put("ironOre", 10);
+        smelterReqs.put("copperOre", 10);
+        new Unlockable("Smelter", new Point2D(2, 1), smelterReqs);
         
         // Circuit Assembler
         new CircuitAssembler(new Point2D(5, 2));
