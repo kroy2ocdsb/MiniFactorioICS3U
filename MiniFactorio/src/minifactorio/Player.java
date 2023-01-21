@@ -6,6 +6,7 @@ package minifactorio;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.ImageView;
@@ -156,7 +157,7 @@ public class Player extends Entity {
             updateInventoryText();
         }
     }
-    
+     
     public void smelt() {
         if (interactingBuilding != null && buildingSlot != "") {
             String ore = buildingSlot + "Ore";
@@ -195,5 +196,23 @@ public class Player extends Entity {
                     Graphics.trailingSpaces(inventory.get("copperBar").toString(), 5),
                     inventory.get("circuit").toString()
             ));
+    }
+    
+    public String inventorySaveContent() {
+        String saveContent = "";
+        
+        String[] keys = (((Set<String>)inventory.keySet()).toArray(new String[inventory.size()]));
+        
+        for (int i = 0; i < inventory.size(); i++) {
+            String item = keys[i];
+            int count = inventory.get(item);
+            
+            saveContent += String.format("%s:%d", item, count);
+            
+            if (i < inventory.size()-1)
+                saveContent += "\n";
+        }
+        
+        return saveContent;
     }
 }

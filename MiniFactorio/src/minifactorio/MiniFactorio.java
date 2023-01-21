@@ -4,6 +4,7 @@
  */
 package minifactorio;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 
 import javafx.application.Application;
@@ -18,13 +19,14 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-JavaFX_2
 
 /**
  *
@@ -34,6 +36,7 @@ public class MiniFactorio extends Application {
     public static World world;
     public static boolean showShed = true;
     public static Stage mainStage;
+    public static Player mainPlayer;
     
     /**
      * @param args the command line arguments
@@ -56,6 +59,7 @@ public class MiniFactorio extends Application {
         String imageDirectory = getClass().getResource("images").getPath();
         imageDirectory = imageDirectory.replace("/", "\\").substring(1);
         imageDirectory = imageDirectory.replace("%20", " ");
+        //System.out.println(imageDirectory);
         MediaLoader.importImages(imageDirectory, new String[] {
             "jeremy.png", "grass1.png", "iron1.png", "copper1.png", "smeltIron2.png", "smeltCopper2.png", "craftCircuit4.png",
             "circuitAssembler1.png"
@@ -99,7 +103,7 @@ public class MiniFactorio extends Application {
                 curEnv.contents.get(1).node.setVisible(showShed);
             }
             else if (key.getCode() == KeyCode.Q) {
-                stage.close();
+                onQuitting(this);
             }
         });
         
@@ -111,11 +115,12 @@ public class MiniFactorio extends Application {
         new Ore("copper", new Point2D(Graphics.WORLD_WIDTH-1, 0));
         
         // Smelter
-        //new Smelter(new Point2D(2, 1));
-        HashMap<String, Integer> smelterReqs = new HashMap<String, Integer>();
+        new Smelter(new Point2D(2, 1));
+        /*HashMap<String, Integer> smelterReqs = new HashMap<String, Integer>();
         smelterReqs.put("ironOre", 10);
         smelterReqs.put("copperOre", 10);
         new Unlockable("Smelter", new Point2D(2, 1), smelterReqs);
+        No time for this unfortunately*/
         
         // Circuit Assembler
         new CircuitAssembler(new Point2D(5, 2));
@@ -125,17 +130,47 @@ public class MiniFactorio extends Application {
         
         
         // Make player
-        Player player = new Player();
-        curEnv.contents.add(0,player);
-        pane.getChildren().add(player.node);
+        mainPlayer = new Player();
+        curEnv.contents.add(0,mainPlayer);
+        pane.getChildren().add(mainPlayer.node);
         
         // Listen for player input
-        PlayerInput.start(player, stage);
+        PlayerInput.start(mainPlayer, stage);
         
-        player.node.toFront();
+        mainPlayer.node.toFront();
+        
+        // Output save
+        mainStage.setOnCloseRequest(x -> {
+            onQuitting(this);
+        });
     }
     
     public static int getTime() {
         return (int)(System.currentTimeMillis());
     } 
+    
+    // saves most recent game to one file
+    public static void onQuitting(MiniFactorio instance) {
+        System.out.println("Stage is closing");
+        // Save file
+        String saveDirectory = instance.getClass().getResource("images").getPath();
+        saveDirectory = saveDirectory.replace("/", "\\").substring(1);
+        saveDirectory = saveDirectory.replace("%20", " ");
+        saveDirectory = saveDirectory.replace("build\\classes\\minifactorio\\images", "saves\\gameSave.txt");
+        //System.out.println(saveDirectory);
+        File save = new File(saveDirectory);
+        try {
+            FileWriter writer = new FileWriter(save);
+            
+            String saveContent = mainPlayer.inventorySaveContent();
+            
+            writer.write(saveContent);
+            writer.close();
+        } catch (IOException e) {
+            System.out.println("An error occured, can't save.");
+        }
+        
+        // quit
+        mainStage.close();
+    }
 }

@@ -1,0 +1,5 @@
+circuit:4
+ironOre:5
+copperBar:2
+ironBar:1
+copperOre:3
